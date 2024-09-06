@@ -20,7 +20,6 @@ public class ArrowController : MonoBehaviour
     {
         float rotation = Input.GetAxis("Horizontal") * rotationSpeed * Time.deltaTime;
         Console.WriteLine(rotation);
-        
         transform.Rotate(0, 0, -rotation);
     }
 }
