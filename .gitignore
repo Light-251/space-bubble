@@ -33,3 +33,6 @@ UserSettings/
 [Bb]uild/
 [Bb]uilds/
 [Pp]rojectSettings/
+
+# Visual Studio Code
+.vscode/settings.json
