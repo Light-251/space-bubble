@@ -6,15 +6,18 @@ using UnityEngine;
 public class ArrowController : MonoBehaviour
 {
 
-    [SerializeField]
-    public float rotationSpeed = 250f;
-    [SerializeField]
-    public GameObject bubblePrefab;
-    public Transform firePoint;
+    public float rotationSpeed = 250f; // Velocità della rotazione della Freccia
+    public GameObject bubblePrefab; // Proiettile
+    public Transform firePoint; // Oggetto usato per istanziare il Proiettile
     public Transform arrowTransform;
+
+    // Range di movimento della Freccia
     public float maxRotation = 155.901f;
     public float minRotation = 29.628f;
-    public float bubbleSpeed = 15f;
+
+    public float bubbleSpeed = 15f; // Velocità del Proiettile
+    public float shootDelay = 0.35f; // Delay in secondi tra uno sparo e l'altro
+    private float nextShootTime = 0f; // Tempo del prossimo sparo consentito
 
     // Start is called before the first frame update
     void Start()
@@ -38,10 +41,10 @@ public class ArrowController : MonoBehaviour
         }
 
         // Sparo della Palla
-        // TODO Aggiungere delay tra gli spari
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space) && Time.time >= nextShootTime)
         {
             shootBubble();
+            nextShootTime = Time.time + shootDelay;
         }
     }
     void shootBubble()
