@@ -5,7 +5,10 @@ using UnityEngine;
 
 public class ArrowController : MonoBehaviour
 {
-
+    public Transform spawnPoint;
+    public float shootForce = 15f;
+    private GameObject currentBubble;
+    private bool isBubbleInstatiated = false;
     public float rotationSpeed = 250f; // Velocità della rotazione della Freccia
     public GameObject bubblePrefab; // Proiettile
     public Transform firePoint; // Oggetto usato per istanziare il Proiettile
@@ -19,15 +22,11 @@ public class ArrowController : MonoBehaviour
     public float shootDelay = 0.35f; // Delay in secondi tra uno sparo e l'altro
     private float nextShootTime = 0f; // Tempo del prossimo sparo consentito
 
-    // Start is called before the first frame update
     void Start()
     {
-        // Disabilita la collisione tra tutti gli oggetti con lo stesso tag "Bubble"
         Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("Bubble"), LayerMask.NameToLayer("Bubble"));
-
     }
 
-    // Update is called once per frame
     void Update()
     {
         // Controllo della direzione della Freccia
@@ -40,17 +39,35 @@ public class ArrowController : MonoBehaviour
             transform.Rotate(0, 0, -rotation);
         }
 
-        // Sparo della Palla
-        if (Input.GetKeyDown(KeyCode.Space) && Time.time >= nextShootTime)
+        // Istanziamento della palla sulla punta della freccia
+        if (!isBubbleInstatiated)
         {
-            shootBubble();
+            InstantiateBubble();
+            isBubbleInstatiated = true;
+        }
+        else
+        {
+            currentBubble.transform.position = spawnPoint.position;
+        }
+
+        // Sparo della Palla
+        if (Input.GetKeyDown(KeyCode.Space) && Time.time >= nextShootTime && currentBubble != null)
+        {
+            ShootBubble();
             nextShootTime = Time.time + shootDelay;
+            isBubbleInstatiated = false;
         }
     }
-    void shootBubble()
+
+    void ShootBubble()
     {
-        GameObject bubble = Instantiate(bubblePrefab, firePoint.position, firePoint.rotation);
-        Rigidbody2D rb = bubble.GetComponent<Rigidbody2D>();
-        rb.velocity = firePoint.right * bubbleSpeed;
+        Rigidbody2D rb = currentBubble.GetComponent<Rigidbody2D>();
+        rb.AddForce(transform.right * shootForce, ForceMode2D.Impulse);
+        currentBubble = null;
+    }
+
+    void InstantiateBubble()
+    {
+        currentBubble = Instantiate(bubblePrefab, spawnPoint.position, Quaternion.identity);
     }
 }

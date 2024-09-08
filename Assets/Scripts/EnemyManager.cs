@@ -2,8 +2,23 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyController : MonoBehaviour
+public class EnemyManager : MonoBehaviour
 {
+
+    public static EnemyManager Instance { get; private set; }
+
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+            // DontDestroyOnLoad(gameObject); //TODO Considerare se ha senso mantenere tra le scene
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
 
     public float speed = 2f;
     public float moveDistance = 0.7f;
@@ -23,6 +38,13 @@ public class EnemyController : MonoBehaviour
     void Update()
     {
 
+        // Move the enemy left and right within a certain distance
+        // MoveEnemies();
+
+    }
+
+    void MoveEnemies()
+    {
         if (movingRight)
         {
             transform.position += Vector3.right * speed * Time.deltaTime;
@@ -42,20 +64,14 @@ public class EnemyController : MonoBehaviour
         enemyCount++;
     }
 
-    public void RemoveEnemy()
+    public void RemoveEnemy(GameObject ball)
     {
         enemyCount--;
 
         if (enemyCount <= 0)
         {
             Debug.Log("Tutti i nemici sono stati distrutti");
-            StopGame();
+            GameManager.Instance.StopGame();
         }
-    }
-
-    void StopGame()
-    {
-        Time.timeScale = 0f;  // Ferma il gioco
-        Debug.Log("Il gioco è stato fermato!");
     }
 }

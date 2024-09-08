@@ -2,50 +2,57 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// TODO: Modificare lo sprite in base al colore
 public class Enemy : MonoBehaviour
 {
-    // Start is called before the first frame update
+    public Color[] possibleColors;
+    public Color enemyColor; // TODO: Configurare l'assegnazione del colore in modo randomico allo spawn
+    private SpriteRenderer spriteRenderer;
+
     void Start()
     {
-        EnemyController enemyController = FindObjectOfType<EnemyController>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        AssignRandomColor();
 
-        if (enemyController != null)
+        if (EnemyManager.Instance != null)
         {
-            enemyController.AddEnemy();
+            EnemyManager.Instance.AddEnemy();
         }
         else
         {
-            Debug.LogError("EnemyController non trovato nella scena");
+            Debug.LogError("EnemyController not found in the scene");
         }
-
     }
 
-    // Update is called once per frame
     void Update()
     {
-
     }
 
     void OnTriggerEnter2D(Collider2D collision)
     {
-
         if (collision.gameObject.CompareTag("Bubble"))
         {
+            BallController ballController = collision.gameObject.GetComponent<BallController>();
+            EnemyManager.Instance.RemoveEnemy(collision.gameObject);
+
+            if (ballController.ballColor == enemyColor)
+                GameManager.Instance.AddScore(15);
+            else
+                GameManager.Instance.AddScore(10);
+
             Destroy(gameObject);
         }
     }
 
+    void AssignRandomColor()
+    {
+        enemyColor = possibleColors[Random.Range(0, possibleColors.Length)];
+        enemyColor.a = 1;
+        spriteRenderer.color = enemyColor;
+    }
+
     void OnDestroy()
     {
-        EnemyController enemyController = FindAnyObjectByType<EnemyController>();
-
-        if (enemyController != null)
-        {
-            enemyController.RemoveEnemy();
-        }
-        else
-        {
-            Debug.LogError("EnemyController non trovato nella scena");
-        }
+        GameManager.Instance.UpdateAvailableColors();
     }
 }
