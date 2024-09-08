@@ -7,4 +7,4 @@ This project is a work in progress, and its primary goal is to explore Unity's f
 
 **Current state**
 ---
-![ezgif-2-797eeddc52](https://github.com/user-attachments/assets/77133a49-28d9-4cc5-a700-0c23cda171d8)
+![ezgif-2-7b8851e10c](https://github.com/user-attachments/assets/77efec47-b7ea-4178-829d-ef517f1e41ef)
