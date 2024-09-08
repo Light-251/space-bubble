@@ -39,7 +39,7 @@ public class EnemyManager : MonoBehaviour
     {
 
         // Move the enemy left and right within a certain distance
-        // MoveEnemies();
+        MoveEnemies();
 
     }
 
