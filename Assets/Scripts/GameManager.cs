@@ -39,7 +39,6 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.Log("Palle rimaste: " + bubblesLeft);
         if (bubblesLeft == 0)
             StopGame();
     }
@@ -76,7 +75,7 @@ public class GameManager : MonoBehaviour
 
     public void UpdateBallsLeft()
     {
-        ballsLeftText.text = bubblesLeft + " Palle Rimaste";
+        ballsLeftText.text = bubblesLeft + " Balls left";
     }
 
     public void StopGame()
